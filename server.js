@@ -15,11 +15,12 @@ app.set('views', viewsPath);
 // use res.render to load up an ejs view file
 
 //Importar Rutas
-const watsonRoutes = require('./routes/api/watson');
 const indexRoutes = require('./routes/api/index');
+const nodeMailler = require('./routes/api/nodemailer');
 
-app.use("/api/watson", watsonRoutes);
+app.use("/api", nodeMailler);
 app.use("/", indexRoutes);
+
 //Start Server
 const port = process.env.PORT || 5000;
 app.listen(port, ()=>{
