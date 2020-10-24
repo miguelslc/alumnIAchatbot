@@ -91,8 +91,8 @@ function handleColorBoxTemplate(event) {
       subject: 'Certificado de Asistencia a Examen',
       message: 'Certificado de Asistencia a Examen',
     };
-    fetch("http://localhost:5000/api/send", {
-      //fetch("https://glacial-reaches-90868.herokuapp.com/api/send", {
+    //fetch("http://localhost:5000/api/send", {
+      fetch("https://alumnia-chatbot.herokuapp.com/api/send", {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
