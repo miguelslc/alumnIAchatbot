@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+
 require('dotenv').config({silent: true});
 
 app.use(express.json());
@@ -15,11 +16,15 @@ app.set('views', viewsPath);
 // use res.render to load up an ejs view file
 
 //Importar Rutas
-const watsonRoutes = require('./routes/api/watson');
 const indexRoutes = require('./routes/api/index');
+const watsonRoutes = require('./routes/api/watson');
+const nodeMailler = require('./routes/api/nodemailer');
 
 app.use("/api/watson", watsonRoutes);
+app.use("/api", nodeMailler);
 app.use("/", indexRoutes);
+
+
 //Start Server
 const port = process.env.PORT || 5000;
 app.listen(port, ()=>{

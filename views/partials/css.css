@@ -1,0 +1,50 @@
+@keyframes slideInRight {
+    from {
+      transform: translate3d(100%, 0, 0);
+      visibility: visible;
+    }
+  
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  button.chatLauncher {
+    animation-duration: 0.5s;
+    transition-duration: 0.5s;
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 9999;
+    border: 2px solid #0864d4;
+    padding: 1em;
+    border-radius: 8px;
+    margin: 0;
+    text-decoration: none;
+    background-color: #689aea;
+    color: #ffffff;
+    font-family: sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 180px;
+    opacity: 0;
+  }
+
+  button.chatLauncher.open {
+    animation-name: slideInRight;
+    opacity: 1;
+  }
+
+  button.chatLauncher:hover,
+  button.chatLauncher:focus {
+    background-color: #91b9f8;
+    border: 2px solid #0053ba;
+  }
+  
+  button.chatLauncher:focus {
+    outline: 1px solid #0053ba;
+    outline-offset: -4px;
+  }

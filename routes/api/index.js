@@ -3,7 +3,6 @@ const router = require('express').Router();
 // index page
 router.get('/', (req, res, next) => {
     res.setHeader('Content-type', 'text/html');
-    res.sendFile('../../views/js/index.js', { root: __dirname });
     res.render('index');
 });
 
