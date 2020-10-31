@@ -6,6 +6,11 @@ router.post('/send', (req, res, next) => {
     var emailFrom = req.body.email;
     var message = req.body.message;
     var subject = req.body.subject;
+    var aula = req.body.aula;
+    var carreras = req.body.carreras;
+    var materias = req.body.materias;
+    var constancia = req.body.constancia;
+ 
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         host: "smtp.gmail.com", //replace with your email provider
@@ -27,11 +32,12 @@ router.post('/send', (req, res, next) => {
 
     var mailOptions = {
         from: 'AlumniaUNLZ@gmail.com',
-        to:  'samziel@gmail.com, ',
+        to:  'samziel@gmail.com,',
         cc: emailFrom,
         subject: ' Nuevo Mensaje | ' + name + ' | ' + subject,
         text: message,
-        html: '<h1>'+message+'</h1>'+' | Solicitado por | '+'<h1>'+name+'</h1>'
+        html: '<h1>'+message+'</h1>'+' | Solicitado por | '+'<h1>'+name+'</h1> <br/> \
+              '+carreras+'  '+aula+'  '+materias+'  '+constancia
     };
     
     transporter.sendMail(mailOptions, (err, info) =>{

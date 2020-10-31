@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
+
 require('dotenv').config({silent: true});
 
 app.use(express.json());
@@ -20,6 +21,7 @@ const nodeMailler = require('./routes/api/nodemailer');
 
 app.use("/api", nodeMailler);
 app.use("/", indexRoutes);
+
 
 //Start Server
 const port = process.env.PORT || 5000;

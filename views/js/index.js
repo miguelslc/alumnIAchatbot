@@ -1,13 +1,42 @@
+//entiendo que es una negrada declarar un objeto global
+//mis conocimientos son limitados y no se como pasarlos para que se manejen 
+//de manera local
+const datoEnviar = {
+  Carreras:'',
+  Constancias:'',
+  Materias:'',
+  Aulas:'',
+};
+
 function TEMPORARY_convertToUserDefinedResponse(event) {
-  console.log(event);
   if (event.data.output.entities && event.data.output.entities[0]) {
-    // Map over all items in the output array.
-    event.data.output.generic = event.data.output.generic.map(function(item) {
+    switch (event.data.output.entities[0].entity) {
+      case "Aulas":
+        datoEnviar.Aulas = event.data.output.entities[0].value;
+        break
+      case "Carreras":
+        datoEnviar.Carreras = event.data.output.entities[0].value;
+        break
+      case "Constancias":
+        datoEnviar.Constancias = event.data.output.entities[0].value;
+        break
+      case "Materias":
+        datoEnviar.Materias = event.data.output.entities[0].value;
+        break
+    }
+
+    //Map over all items in the output array.+
+    event.data.output.generic = event.data.output.generic.map((item) => {
       // If we find one that matches our convention to transform to user_defined response type, make the transformation.
       if (item.response_type === 'text' ){
         switch (item.text) {
-          case 'esto es una prueba':
-            item.response_type = 'esto es una prueba';
+          case 'Horarios':
+            item.response_type = 'Horarios';
+            item.user_defined = event.data.output.user_defined;
+            delete item.text;
+            break
+          case 'Examenes':
+            item.response_type = 'Examenes';
             item.user_defined = event.data.output.user_defined;
             delete item.text;
             break;  
@@ -19,6 +48,10 @@ function TEMPORARY_convertToUserDefinedResponse(event) {
               item.user_defined = event.data.output.user_defined;
               delete item.text;
               break
+          case 'plan-estudio':
+            item.response_type = 'Plan de Estudio';
+            item.user_defined = event.data.output.user_defined;
+            delete item.text;
         }
       }
 
@@ -39,7 +72,6 @@ function TEMPORARY_convertToUserDefinedResponse(event) {
         *   }
         * }
         */
-
       return item;
     });
   }
@@ -51,16 +83,90 @@ function customResponseHandler(event) {
   // Add a switch so you can watch for different custom responses.
   // By convention, have a "template_name" property inside your user_defined object.
   switch (message.user_defined.template_name) {
-    case 'color_box':
+    case 'examenes_defined':
+      handleExamenesEvent(event);
+      break
+      case 'planEstudio_defined':
+        handlePlanEstudioEvent(event);
+        break
+    case 'horarios_defined':
+      handleHorariosEvent(event);
+      break
     case 'aulas_defined':
-      handleColorBoxTemplate(event);
+      handleAulasEvent(event);
       break;
     default:
       console.error('Unhandled response type.');
   }
 }
 
-function handleColorBoxTemplate(event) {
+
+function handlePlanEstudioEvent(event) {
+  const parent = document.createElement('div');
+
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
+  element.innerHTML = 
+       '<div class="container">\
+          <a href="https://drive.google.com/file/d/1vpIP4DBhK_PLHsg58yyUGDMSs8DXKkFR/view?usp=sharing" target="_blank">Plan de Estudio</a>\
+       </div>';
+
+  card.appendChild(element);
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
+}
+
+function handleExamenesEvent(event) {
+  const parent = document.createElement('div');
+
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
+  element.innerHTML = 
+       '<div class="container">\
+          <a href="https://drive.google.com/file/d/1TKUBDno2BFCPgI5FfMnBWp-QCFgShDQM/view?usp=sharing" target="_blank">Examenes</a>\
+       </div>';
+
+  card.appendChild(element);
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
+}
+
+function handleHorariosEvent(event) {
+  const parent = document.createElement('div');
+
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
+  element.innerHTML = 
+       '<div class="container">\
+          <a href="https://drive.google.com/file/d/1l03tbJrb-6EhZQksEggmdsz0tF0DL38-/view?usp=sharing" target="_blank">Horarios</a>\
+       </div>';
+
+  card.appendChild(element);
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
+}
+
+function handleAulasEvent(event) {
+  const { message } = event.data;
+
   const parent = document.createElement('div');
 
   // Create a element with the 'ibm-web-chat-card' class we will add our content to.
@@ -77,31 +183,31 @@ function handleColorBoxTemplate(event) {
       <button>Solicitar Confirmacion!</button> \
       </div>';
 
-  
-
   element.querySelector('button').addEventListener('click', function addBackgroundColor(e) {
-
     var name = element.getElementsByTagName('input')[0].value;
     var email = element.getElementsByTagName('input')[1].value;
-    console.log(name)
-    console.log(email)
     var payload = {
       name: name,
       email: email,
-      subject: 'Certificado de Asistencia a Examen',
-      message: 'Certificado de Asistencia a Examen',
+      subject: datoEnviar.Constancias,
+      message: datoEnviar.Constancias,
+      aula: datoEnviar.Aulas,
+      carreras: datoEnviar.Carreras, 
+      materias: datoEnviar.Materias,
+      constancia: datoEnviar.Constancias
     };
+    console.log(payload)
     //fetch("http://localhost:5000/api/send", {
-      fetch("https://alumnia-chatbot.herokuapp.com/api/send", {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(payload)
-      })
-      .then(function(res){ return res.json(); })
-      .then(function(data){ alert( JSON.stringify( data ) ) })
+    fetch("https://alumnia-chatbot.herokuapp.com/api/send", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) { alert(JSON.stringify(data)) })
   });
 
   // Add our color picker inside the card.
@@ -110,9 +216,6 @@ function handleColorBoxTemplate(event) {
 
   parent.appendChild(card);
   event.data.element.appendChild(parent);
-
-  
-
 }
 
 window.watsonAssistantChatOptions = {

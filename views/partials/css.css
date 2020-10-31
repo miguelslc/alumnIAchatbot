@@ -47,9 +47,13 @@
   button.chatLauncher:focus {
     outline: 1px solid #0053ba;
     outline-offset: -4px;
+<<<<<<< HEAD
   }
 
 .content-img {
     background-image: url("../img/background.jpg");
     height: 450px;
 }
+=======
+  }
+>>>>>>> cbe73a4f21537cf2cbe1c58dd78add94f2a6857e
