@@ -51,6 +51,10 @@
 
 .content-img {
     background-image: url("../img/background.jpg");
+    background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        -o-background-size: cover;
     height: 450px;
 }
 
