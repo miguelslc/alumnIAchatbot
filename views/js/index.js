@@ -216,8 +216,8 @@ function handlePlanEstudioEvent(event) {
     case 'Tec. en Implementación y Gestión Informática':
       var PDF = 'https://drive.google.com/file/d/1J3L2poN6wJcaNKqocM3jaygOgtrEB9F8/view?usp=sharing';
       break
-    case 'Lic. en Sistemas de Automación y Robótica':
-      var PDF = 'https://drive.google.com/file/d/1k4lAzkrulzVV3FAfCaTUxvtyXTDQQp_9/view?usp=sharing';
+    case 'Lic. en Gestión de Sistemas de Automación y Robótica':
+      var PDF = 'https://drive.google.com/file/d/1J3L2poN6wJcaNKqocM3jaygOgtrEB9F8/view?usp=sharing';
       break;
     default:
       console.error('Unhandled response type.');

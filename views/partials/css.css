@@ -53,3 +53,7 @@
     background-image: url("../img/background.jpg");
     height: 450px;
 }
+
+.header, footer {
+  background-color: #0c71b9;
+}
