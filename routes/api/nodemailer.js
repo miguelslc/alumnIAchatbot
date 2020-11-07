@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const nodemailer = require("nodemailer");
 
-router.post('/send', (req, res, next) => {
+router.post('/send/certificadoExamen', (req, res, next) => {
     var name = req.body.name;
     var emailFrom = req.body.email;
     var message = req.body.message;
@@ -16,7 +16,7 @@ router.post('/send', (req, res, next) => {
         host: "smtp.gmail.com", //replace with your email provider
         port: 587,
         auth: {
-           
+            
         },
     });
     
