@@ -385,22 +385,22 @@ function handlePlanEstudioEvent(event) {
   console.log(message);
   switch (message.user_defined.context.carreras) {
     case 'Lic. En Gestion de la Informacion':
-      var PDF = 'https://drive.google.com/file/d/1KS9U1G9fbiDjHSnMhOuSZdoCnD2ylWdN/view?usp=sharing';
+      var PDF = 'https://drive.google.com/file/d/1EQEQRTEBZizcy05jjyLWPzGZuT2jwoG2/view?usp=sharing';
       break
     case 'Lic. En Higiene y Seguridad en el Trabajo':
-      var PDF = ' https://drive.google.com/file/d/1IbW1Dio1CEOIHHqc1NeWwz6jIp8bv2qF/view?usp=sharing';
+      var PDF = 'https://drive.google.com/file/d/1HGKY1ZYZYE6ebMx8oprV4-V3YE_eGoCG/view?usp=sharing';
       break
     case 'Tec. En Programacion de Computadoras':
-      var PDF = 'https://drive.google.com/file/d/1rKF9nFSqNxVo3fUh97yTEOmMQCDyyB0g/view?usp=sharing';
+      var PDF = 'https://drive.google.com/file/d/1MNuHyr1EIKs9LTC8AoZThStbuQ_xSOPr/view?usp=sharing';
       break
     case 'Esp. en Ingeniería Ambiental y Desarrollo Sostenible':
-      var PDF = 'https://drive.google.com/file/d/1OHRQIYDzLfx1b4f41ug1mWXyBzbZqhUl/view?usp=sharing';
+      var PDF = 'https://drive.google.com/file/d/1Y15y5_9VifW2LuGJLOFoXO21OOv5pnSb/view?usp=sharing';
       break
     case 'Tec. en Implementación y Gestión Informática':
-      var PDF = 'https://drive.google.com/file/d/1J3L2poN6wJcaNKqocM3jaygOgtrEB9F8/view?usp=sharing';
+      var PDF = 'https://drive.google.com/file/d/1LcBTyBv84JNJwt-nq5NXwcpmHunSbCP1/view?usp=sharing';
       break
     case 'Lic. en Gestión de Sistemas de Automación y Robótica':
-      var PDF = 'https://drive.google.com/file/d/1J3L2poN6wJcaNKqocM3jaygOgtrEB9F8/view?usp=sharing';
+      var PDF = 'https://drive.google.com/file/d/1uwicx0PzOTVcRhfl3pOe-QdcftxQfp-c/view?usp=sharing';
       break;
     default:
       console.error('Unhandled response type.');
@@ -439,7 +439,7 @@ function handleExamenesEvent(event) {
   element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
   element.innerHTML = 
        '<div class="container">\
-          <a href="https://drive.google.com/file/d/1TKUBDno2BFCPgI5FfMnBWp-QCFgShDQM/view?usp=sharing" target="_blank">Examenes</a>\
+          <a href="https://drive.google.com/file/d/1eIO6EFEljF-Rs7cmGDcj8SejIt42XJct/view?usp=sharing" target="_blank">Examenes</a>\
        </div>';
 
   card.appendChild(element);
@@ -500,7 +500,7 @@ function handleHorariosEvent(event) {
   element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
   element.innerHTML = 
        '<div class="container">\
-          <a href="https://drive.google.com/file/d/1l03tbJrb-6EhZQksEggmdsz0tF0DL38-/view?usp=sharing" target="_blank">Horarios</a>\
+          <a href="https://drive.google.com/file/d/1Q3IvCdheyIhlFNgm6C8p1KwkLXa6yRcA/view?usp=sharing" target="_blank">Horarios</a>\
        </div>';
   card.appendChild(element);
   parent.appendChild(card);
