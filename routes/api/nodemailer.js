@@ -16,7 +16,7 @@ router.post('/send/certificadoExamen', (req, res, next) => {
         host: "smtp.gmail.com", //replace with your email provider
         port: 587,
         auth: {
-            
+      
         },
     });
     
