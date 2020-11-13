@@ -3,6 +3,7 @@ const router = require('express').Router();
 // index page
 router.get('/', (req, res, next) => {
     res.setHeader('Content-type', 'text/html');
+    res.setHeader('X-Content-Type-Options', 'no-sniff');
     res.render('index');
 });
 

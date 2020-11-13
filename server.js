@@ -17,10 +17,8 @@ app.set('views', viewsPath);
 
 //Importar Rutas
 const indexRoutes = require('./routes/api/index');
-const watsonRoutes = require('./routes/api/watson');
 const nodeMailler = require('./routes/api/nodemailer');
 
-app.use("/api/watson", watsonRoutes);
 app.use("/api", nodeMailler);
 app.use("/", indexRoutes);
 
