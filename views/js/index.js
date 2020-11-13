@@ -2,7 +2,8 @@
 //mis conocimientos son limitados y no se como pasarlos para que se manejen 
 //de manera local
 
-import {getImgCertificadoAlumnoRegular, getImgCertificadoExamen} from './base64img.js';
+//import { delete } from '../../routes/api/nodemailer.js';
+import {templateCertificado} from './base64img.js';
 
 const datoEnviar = {
   Carreras:'',
@@ -44,6 +45,11 @@ function TEMPORARY_convertToUserDefinedResponse(event) {
       // If we find one that matches our convention to transform to user_defined response type, make the transformation.
       if (item.response_type === 'text' ){
         switch (item.text) {
+          case 'direccion-sede':
+            item.response_type = 'Direccion';
+            item.user_defined = event.data.output.user_defined;
+            delete item.text;
+            break
           case 'Horarios':
             item.response_type = 'Horarios';
             item.user_defined = event.data.output.user_defined;
@@ -79,12 +85,20 @@ function customResponseHandler(event) {
 
   // Add a switch so you can watch for different custom responses.
   // By convention, have a "template_name" property inside your user_defined object.
+  console.log('entro en customResponseHandler');
+  console.log(message);
   switch (message.user_defined.template_name) {
+    case 'sede_defined':
+      handleSedeEvent(event);
+      break
     case 'alumnoRegular_defined':
       handleCertificadoAlumnoRegularEvent(event);
       break
     case 'examenes_defined':
       handleExamenesEvent(event);
+      break
+    case 'trabajoCampo_defined':
+      handleCertificadoTrabajoCampo(event);
       break
     case 'planEstudio_defined':
       handlePlanEstudioEvent(event);
@@ -98,6 +112,182 @@ function customResponseHandler(event) {
     default:
       console.error('Unhandled response type.');
   }
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function handleCertificadoExamenEvent(event) {
+  const parent = document.createElement('div');
+
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
+  element.innerHTML = ' <div class="container"> \
+      <input type="text" id="name" class="name" name="nombre" placeholder="Tu Nombre.."> \
+      <input type="text" id="email" class="email" name="email" placeholder="Tu Mail.."> \
+      <input type="text" id="empresa" class="empresa" name="empresa" placeholder="Lugar de Trabajo.."> \
+      <button>Solicitar Confirmacion!</button> \
+      </div>';
+
+  element.querySelector('button').addEventListener('click', function addBackgroundColor(e) {
+    datoEnviar.Nombre = element.getElementsByTagName('input')[0].value;
+    datoEnviar.Email = element.getElementsByTagName('input')[1].value;
+    datoEnviar.Empresa = element.getElementsByTagName('input')[2].value;
+
+    datoEnviar.Tiempo = new Date();
+
+    let date = new Date();
+    
+    let m = (date.getMonth() + 1).toString().padStart(2, "0");
+    let d = date.getDate().toString().padStart(2, "0");
+    let y = date.getFullYear();
+
+    let payload = {
+      name: datoEnviar.Nombre,
+      email: datoEnviar.Email,
+      subject: datoEnviar.Constancias,
+      message: datoEnviar.Constancias,
+      aula: datoEnviar.Aulas,
+      carreras: datoEnviar.Carreras, 
+      materias: datoEnviar.Materias,
+      constancia: datoEnviar.Constancias,
+      empresa: datoEnviar.Empresa,
+      tiempo: datoEnviar.Tiempo,
+      sede: datoEnviar.Sede,
+      dni: datoEnviar.Dni
+    };
+
+    console.log(payload)
+    //fetch("http://localhost:5000/api/send/certificadoExamen", {
+    fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoExamen", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (data) { alert(JSON.stringify(data)) })
+
+    var pdf = new jsPDF();
+
+    pdf.addImage(templateCertificado, 'JPG', 0, 0, 200, 280);
+    pdf.setFont("helvetica");
+    pdf.setFontType("bold");
+    pdf.setFontSize(10);
+
+    pdf.text(72, 40, datoEnviar.Carreras);
+    pdf.text(88, 50, 'SEDE  ' + datoEnviar.Sede);
+    pdf.text(140, 85, `CABA ${d} de ${m} de ${y}`);
+
+    pdf.text(20, 110, 'Por medio de la presente certificamos que el alumno : ' + datoEnviar.Nombre);
+    pdf.text(20, 116, '( DNI : ' + datoEnviar.Dni + ' ) se encuentra cursando la ' + datoEnviar.Carreras);
+    pdf.text(20, 122, 'y en el día de la fecha ha rendido parcial : ' + (datoEnviar.Modalidad || 'Virtual') + ' de la asignatura :' + datoEnviar.Materias );
+    pdf.text(20, 128, 'Extendemos la presente constancia ante: ' + datoEnviar.Empresa);
+
+    pdf.save(`Constancia de Examen - ${datoEnviar.Nombre}-${datoEnviar.Materias}.pdf`);
+  });
+
+  // Add our color picker inside the card.
+  card.innerHTML = '<p style="margin-top:0;"><strong>Por Ultimo tu Nombre y Mail</strong></p>';
+  card.appendChild(element);
+
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function handleCertificadoTrabajoCampo(event) {
+  console.log('ingreso en trabajo de campo')
+  const parent = document.createElement('div');
+
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
+  element.innerHTML = ' <div class="container"> \
+      <input type="text" id="name" class="name" name="nombre" placeholder="Tu Nombre y Apellido.."> \
+      <input type="text" id="dni" class="dni" name="dni" placeholder="Tu Dni.."> \
+      <input type="text" id="empresa" class="empresa" name="empresa" placeholder="Lugar de Trabajo.."> \
+      <br/> \
+      <button>Solicitar Confirmacion!</button> \
+      </div>';
+
+  element.querySelector('button').addEventListener('click', function addBackgroundColor(e) {
+    datoEnviar.Nombre = element.getElementsByTagName('input')[0].value;
+    datoEnviar.Dni = element.getElementsByTagName('input')[1].value;
+    datoEnviar.Empresa = element.getElementsByTagName('input')[2].value;
+    datoEnviar.Tiempo = new Date();
+
+    let date = new Date();
+    
+    let m = (date.getMonth() + 1).toString().padStart(2, "0");
+    let d = date.getDate().toString().padStart(2, "0");
+    let y = date.getFullYear();
+
+    let payload = {
+      name: datoEnviar.Nombre,
+      email: datoEnviar.Email,
+      subject: datoEnviar.Constancias,
+      message: datoEnviar.Constancias,
+      aula: datoEnviar.Aulas,
+      carreras: datoEnviar.Carreras, 
+      materias: datoEnviar.Materias,
+      constancia: datoEnviar.Constancias,
+      empresa: datoEnviar.Empresa,
+      tiempo: datoEnviar.Tiempo,
+      sede: datoEnviar.Sede,
+      dni: datoEnviar.Dni
+    };
+   /*  console.log(payload)
+    fetch("http://localhost:5000/api/send/certificadoAlumnoRegular", {
+    //fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoAlumnoRegular", {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (data) { alert(JSON.stringify(data)) }) */
+
+    let pdf = new jsPDF();
+    
+    pdf.addImage(templateCertificado, 'JPG', 0, 0, 200, 280);
+    pdf.setFont("helvetica");
+    pdf.setFontType("bold");
+    pdf.setFontSize(10);
+    
+    pdf.text(72, 40, datoEnviar.Carreras);
+    pdf.text(88, 50, 'SEDE  ' + datoEnviar.Sede);
+    pdf.text(140, 85, `CABA ${d} de ${m} de ${y}`);
+    pdf.text(20, 110, 'Por medio de la presente certificamos que el alumno : ' + datoEnviar.Nombre);
+    pdf.text(20, 116, '( DNI : ' + datoEnviar.Dni + ' ) en el marco de la ' + datoEnviar.Carreras);
+    pdf.text(20, 122, 'se encuentra realizando un trabajo de campo para : ' + datoEnviar.Materias);
+    pdf.text(20, 128, 'Extendemos la presente constancia ante: ' + datoEnviar.Empresa);
+
+    pdf.save(`Constancia de Trabajo de Campo - ${datoEnviar.Nombre}-${datoEnviar.Materias}.pdf`);
+
+  });
+
+  // Add our color picker inside the card.
+  card.innerHTML = '<p style="margin-top:0;"><strong>Por Ultimo tu Nombre y Apellido, Mail y Tu Lugar de Trabajo</strong></p>';
+  card.appendChild(element);
+
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,27 +353,20 @@ function handleCertificadoAlumnoRegularEvent(event) {
 
     let pdf = new jsPDF();
     
-    //let imgData = getImgCertificadoAlumnoRegular;
-    console.log(getImgCertificadoAlumnoRegular);
-
-    pdf.addImage(getImgCertificadoAlumnoRegular, 'JPG', 0, 0, 210, 297);
+    pdf.addImage(templateCertificado, 'JPG', 0, 0, 200, 280);
     pdf.setFont("helvetica");
     pdf.setFontType("bold");
     pdf.setFontSize(10);
-    
-    pdf.text(77, 55, datoEnviar.Carreras);
-    pdf.text(110, 63, datoEnviar.Sede);
 
-    pdf.text(122, 112, datoEnviar.Nombre);
-    pdf.text(20, 117, datoEnviar.Dni);
-    pdf.text(95, 117, datoEnviar.Carreras);
-    pdf.text(100, 123, datoEnviar.Empresa);
+    pdf.text(72, 40, datoEnviar.Carreras);
+    pdf.text(88, 50, 'SEDE  ' + datoEnviar.Sede);
+    pdf.text(140, 85, `CABA ${d} de ${m} de ${y}`);
 
-    pdf.text(135,95, `${d}`);
-    pdf.text(150,95, `${m}`);
-    pdf.text(168,95, `${y}`);
+    pdf.text(20, 110, 'Por medio de la presente certificamos que el alumno : ' + datoEnviar.Nombre);
+    pdf.text(20, 116, '( DNI : ' + datoEnviar.Dni + ' ) se encuentra cursando la ' + datoEnviar.Carreras);
+    pdf.text(20, 122,  'Extendemos la presente constancia ante: ' + datoEnviar.Empresa);
 
-    pdf.save(`constanciaAlumnoRegular:${datoEnviar.Nombre}-${datoEnviar.Materias}.pdf`);
+    pdf.save(`Constancia Alumno Regular - ${datoEnviar.Nombre}.pdf`);
 
   });
 
@@ -266,6 +449,44 @@ function handleExamenesEvent(event) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function handleSedeEvent(event) {
+  const parent = document.createElement('div');
+
+  //Don Bosco 3729, C1206ABG
+
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%;');
+  let sedeCaba = '"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.6700123669243!2d-58.420458384770015!3d-34.61250498045722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca5f4f04cf0b%3A0x710eb7645618a25a!2sDon%20Bosco%203729%2C%20C1206%20ABG%2C%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1605219706259!5m2!1ses-419!2sar"';
+  let sedeLomas = '"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3277.1695839538174!2d-58.45933378429316!3d-34.776505880414966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcd2192e981fe7%3A0x4926bfc663d3eee8!2sFacultad%20de%20Ingenier%C3%ADa%20Universidad%20Nacional%20de%20Lomas%20de%20Zamora!5e0!3m2!1ses-419!2sar!4v1605221257139!5m2!1ses-419!2sar"';
+  
+  let sede = (datoEnviar.Sede == "CABA") ? sedeCaba : sedeLomas;
+  
+  element.innerHTML = 
+  '<div class="google-maps"> \
+    <iframe src='+`${sede}`+' \
+      width="200" \
+      height="200" \
+      frameborder="0" \
+      style="border:0;" \
+      allowfullscreen="" \
+      aria-hidden="false" \
+      tabindex="0">\
+    </iframe>\
+  </div>';
+
+  card.appendChild(element);
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function handleHorariosEvent(event) {
   const parent = document.createElement('div');
 
@@ -281,76 +502,7 @@ function handleHorariosEvent(event) {
        '<div class="container">\
           <a href="https://drive.google.com/file/d/1l03tbJrb-6EhZQksEggmdsz0tF0DL38-/view?usp=sharing" target="_blank">Horarios</a>\
        </div>';
-
   card.appendChild(element);
-  parent.appendChild(card);
-  event.data.element.appendChild(parent);
-};
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function handleCertificadoExamenEvent(event) {
-  const parent = document.createElement('div');
-
-  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
-  // This class makes the element look like one of the cards used in web chat.
-  const card = document.createElement('div');
-  card.classList.add('ibm-web-chat-card');
-
-  const element = document.createElement('div');
-  
-  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
-  element.innerHTML = ' <div class="container"> \
-      <input type="text" id="name" class="name" name="nombre" placeholder="Tu Nombre.."> \
-      <input type="text" id="email" class="email" name="email" placeholder="Tu Mail.."> \
-      <button>Solicitar Confirmacion!</button> \
-      </div>';
-
-  element.querySelector('button').addEventListener('click', function addBackgroundColor(e) {
-    datoEnviar.Nombre = element.getElementsByTagName('input')[0].value;
-    datoEnviar.Email = element.getElementsByTagName('input')[1].value;
-    var payload = {
-      name: datoEnviar.Nombre,
-      email: datoEnviar.Email,
-      subject: datoEnviar.Constancias,
-      message: datoEnviar.Constancias,
-      aula: datoEnviar.Aulas,
-      carreras: datoEnviar.Carreras, 
-      materias: datoEnviar.Materias,
-      constancia: datoEnviar.Constancias
-    };
-    console.log(payload)
-    //fetch("http://localhost:5000/api/send/certificadoExamen", {
-    fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoExamen", {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: "POST",
-      body: JSON.stringify(payload)
-    })
-    .then(function (res) { return res.json(); })
-    .then(function (data) { alert(JSON.stringify(data)) })
-
-    var doc = new jsPDF();
-
-    var imgData = getImgCertificadoExamen;
-    console.log(imgData);
-    doc.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-    doc.text(23, 80, datoEnviar.Nombre);
-    doc.text(123, 80, datoEnviar.Constancias);
-    doc.text(23, 100, datoEnviar.Aulas);
-    doc.text(123, 100, datoEnviar.Carreras);
-    doc.text(23, 120, datoEnviar.Materias);
-    doc.text(123, 120, datoEnviar.Email);
-
-    doc.save(`constanciaExamen:${datoEnviar.Nombre}-${datoEnviar.Materias}.pdf`);
-  });
-
-  // Add our color picker inside the card.
-  card.innerHTML = '<p style="margin-top:0;"><strong>Por Ultimo tu Nombre y Mail</strong></p>';
-  card.appendChild(element);
-
   parent.appendChild(card);
   event.data.element.appendChild(parent);
 };
