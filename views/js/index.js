@@ -26,6 +26,7 @@ function TEMPORARY_convertToUserDefinedResponse(event) {
     switch (event.data.output.entities[0].entity) {
       case "Sedes":
         datoEnviar.Sede = event.data.output.entities[0].value;
+        break
       case "Aulas":
         datoEnviar.Aulas = event.data.output.entities[0].value;
         break
@@ -162,7 +163,6 @@ function handleCertificadoExamenEvent(event) {
       dni: datoEnviar.Dni
     };
 
-    console.log(payload)
     //fetch("http://localhost:5000/api/send/certificadoExamen", {
     fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoExamen", {
       headers: {

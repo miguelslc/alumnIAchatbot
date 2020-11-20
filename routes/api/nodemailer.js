@@ -10,13 +10,14 @@ router.post('/send/certificadoExamen', (req, res, next) => {
     var carreras = req.body.carreras;
     var materias = req.body.materias;
     var constancia = req.body.constancia;
- 
+
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         host: "smtp.gmail.com", //replace with your email provider
         port: 587,
         auth: {
-            
+            user: 'AlumniaUNLZ@gmail.com',
+            pass: 'R3d0bl@nt3'
         },
     });
     
