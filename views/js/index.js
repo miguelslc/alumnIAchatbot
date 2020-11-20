@@ -163,8 +163,8 @@ function handleCertificadoExamenEvent(event) {
       dni: datoEnviar.Dni
     };
 
-    fetch("http://localhost:5000/api/send/certificadoExamen", {
-    //fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoExamen", {
+    //fetch("http://localhost:5000/api/send/certificadoExamen", {
+    fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoExamen", {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
