@@ -34,8 +34,8 @@ function validateForm() {
         message: message,
     };
 
-    fetch("http://localhost:5000/api/send/contactUs", {
-        //fetch("https://alumnia-chatbot.herokuapp.com/api/send/contactUs", {
+    //fetch("http://localhost:5000/api/send/contactUs", {
+    fetch("https://alumnia-chatbot.herokuapp.com/api/send/contactUs", {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
