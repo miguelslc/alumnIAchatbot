@@ -3,24 +3,23 @@
 <head>
     <%- include('./partials/head'); %>
     <link rel="stylesheet" href="./partials/css.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <script type="module" src="./js/index.js">
-        
-    </script>
+    <script type="text/javascript" src="./js/contact.js"></script>
 </head>
 <body class="container">
-    
+
     <header>
         <%- include('./partials/header'); %>
     </header>
 
     <main>
-        <%- include('./partials/main')-%>
+        <div class="container">
+            <%- include('./partials/contact'); %>
+        </div>
     </main>
 
     <footer>
         <%- include('./partials/footer'); %>
     </footer>
-   
+
 </body>
 </html>
