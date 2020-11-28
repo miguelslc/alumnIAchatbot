@@ -46,6 +46,11 @@ function TEMPORARY_convertToUserDefinedResponse(event) {
       // If we find one that matches our convention to transform to user_defined response type, make the transformation.
       if (item.response_type === 'text' ){
         switch (item.text) {
+          case 'metodo-pago':
+            item.response_type = 'Metodo de Pago';
+            item.user_defined = event.data.output.user_defined;
+            delete item.text;
+            break
           case 'direccion-sede':
             item.response_type = 'Direccion';
             item.user_defined = event.data.output.user_defined;
@@ -89,6 +94,9 @@ function customResponseHandler(event) {
   console.log('entro en customResponseHandler');
   console.log(message);
   switch (message.user_defined.template_name) {
+    case 'metodoPago_defined':
+      handleMetodoPagoEvent(event);
+      break
     case 'sede_defined':
       handleSedeEvent(event);
       break
@@ -114,7 +122,29 @@ function customResponseHandler(event) {
       console.error('Unhandled response type.');
   }
 };
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function handleMetodoPagoEvent(event) {
+  const parent = document.createElement('div');
 
+  // Create a element with the 'ibm-web-chat-card' class we will add our content to.
+  // This class makes the element look like one of the cards used in web chat.
+  const card = document.createElement('div');
+  card.classList.add('ibm-web-chat-card');
+
+  const element = document.createElement('div');
+  
+  element.setAttribute('style', 'width:100%; height:100%; text-align: left;');
+  element.innerHTML = ' <div class="container"> \
+      <p>Efectivo: Presencial en la Sede.</p>\
+      <p>Transferencia: Datos de transferencia. </p>\
+      <p>Mercado Pago: Mandar mail la direccion de tesoreria de la facultad. </p>\
+      </div>';
+
+  card.appendChild(element);
+
+  parent.appendChild(card);
+  event.data.element.appendChild(parent);
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function handleCertificadoExamenEvent(event) {
