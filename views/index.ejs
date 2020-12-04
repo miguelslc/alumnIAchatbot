@@ -2,25 +2,50 @@
 <html lang="en">
 <head>
     <%- include('./partials/head'); %>
-    <link rel="stylesheet" href="./partials/css.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
-    <script type="module" src="./js/index.js">
-        
-    </script>
 </head>
-<body class="container">
+<body class="container-fluid">
     
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
+    <div class="row">
+        <header>
+            <%- include('./partials/header'); %>
+        </header>
+    </div>
 
-    <main>
+    <div>
         <%- include('./partials/main')-%>
-    </main>
+    </div>
 
-    <footer>
-        <%- include('./partials/footer'); %>
-    </footer>
-   
+    <div class="about" id="about">
+        <div class="heading">
+            <h2>About Us</h2>
+        </div>
+        <div class="row">
+            <% people.forEach( person => { %>
+                <%- include('./partials/cards', {person:person}); %>
+            <% }) %>
+        </div>
+    </div>
+    
+    <div class="ayuda" id="ayuda">
+        <div class="heading">
+            <h2>Ayuda</h2>
+        </div>
+        <div class="row">
+            <% videos.forEach( video => { %>
+                <%- include('./partials/videos', {video:video}); %>
+            <% }) %> 
+        </div>
+    </div>
+
+    
+    <div class="contactUs" id="contact">
+        <%- include('./partials/contact'); %>
+    </div>
+
+    <div class="row">
+        <div class="footer">
+            <%- include('./partials/footer'); %>
+        </div>
+    </div>
 </body>
 </html>
