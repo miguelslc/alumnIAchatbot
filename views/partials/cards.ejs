@@ -1,11 +1,15 @@
-
-    <div class="col-md-3">
-        <div class="card h-100">
-            <img src="http://placehold.it/300x300" alt="<%= person.name %>  <%= person.lastName %>" class="img-thumbnail rounded-circle">
-            <div class="card-body">
-                <h5 class="card-title"><%= person.name %>  <%= person.lastName %></h5>
-                <h4><%= person.job %></h4>
-                <p><%= person.description %></p>
-            </div>
+<div class="col-md-3">
+    <div class="card h-90">
+        <img src="<%= person.img %>" 
+             alt="<%= person.name %>  <%= person.lastName %>" 
+             class="img-fluid img-thumbnail rounded-circle"
+             data-placement="top" 
+             title="<%= person.name %>  <%= person.lastName %> - <%= person.job %>"
+        >
+        <div class="card-body">
+            <h5 class="card-title"><%= person.name %>  <%= person.lastName %></h5>
+            <h4><%= person.job %></h4>
+            <p><%= person.description %></p>
         </div>
     </div>
+</div>

@@ -2,9 +2,10 @@
 //mis conocimientos son limitados y no se como pasarlos para que se manejen 
 //de manera local
 
-//import { delete } from '../../routes/api/nodemailer.js';
+//Importamos la imagen que se usa para los certificados codificada en base64
 import {templateCertificado} from './base64img.js';
 
+//variable que se utiliza como payload para nodemailer y rellenado de datos en los formularios
 const datoEnviar = {
   Carreras:'',
   Constancias:'',
@@ -20,7 +21,7 @@ const datoEnviar = {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Utilizamos esta funcion como recepcion a respuestas que envia Watson
 function TEMPORARY_convertToUserDefinedResponse(event) {
   if (event.data.output.entities && event.data.output.entities[0]) {
     switch (event.data.output.entities[0].entity) {
@@ -91,8 +92,6 @@ function customResponseHandler(event) {
 
   // Add a switch so you can watch for different custom responses.
   // By convention, have a "template_name" property inside your user_defined object.
-  console.log('entro en customResponseHandler');
-  console.log(message);
   switch (message.user_defined.template_name) {
     case 'metodoPago_defined':
       handleMetodoPagoEvent(event);
@@ -123,6 +122,8 @@ function customResponseHandler(event) {
   }
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Metodo de recepcion para los Metodos de pago
+//Genera una card - bootstrap - con diferentes items
 function handleMetodoPagoEvent(event) {
   const parent = document.createElement('div');
 
@@ -146,7 +147,10 @@ function handleMetodoPagoEvent(event) {
   event.data.element.appendChild(parent);
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Metodo de recepcion para los certificados de Examen
+//Genera una card - bootstrap - con diferentes items
+//Se manda mail una vez realizada carga de datos en el PDF - PDFKit
+//Solicita Datos al Usuario
 function handleCertificadoExamenEvent(event) {
   const parent = document.createElement('div');
 
@@ -193,7 +197,6 @@ function handleCertificadoExamenEvent(event) {
       dni: datoEnviar.Dni
     };
 
-    //fetch("http://localhost:5000/api/send/certificadoExamen", {
     fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoExamen", {
       headers: {
         'Accept': 'application/json',
@@ -233,9 +236,10 @@ function handleCertificadoExamenEvent(event) {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Metodo de recepcion para los certificados de Trabajo de Campo
+//Se Genera un PDF - PDFKit
+//Solicita Datos al Usuario
 function handleCertificadoTrabajoCampo(event) {
-  console.log('ingreso en trabajo de campo')
   const parent = document.createElement('div');
 
   // Create a element with the 'ibm-web-chat-card' class we will add our content to.
@@ -266,33 +270,6 @@ function handleCertificadoTrabajoCampo(event) {
     let d = date.getDate().toString().padStart(2, "0");
     let y = date.getFullYear();
 
-    let payload = {
-      name: datoEnviar.Nombre,
-      email: datoEnviar.Email,
-      subject: datoEnviar.Constancias,
-      message: datoEnviar.Constancias,
-      aula: datoEnviar.Aulas,
-      carreras: datoEnviar.Carreras, 
-      materias: datoEnviar.Materias,
-      constancia: datoEnviar.Constancias,
-      empresa: datoEnviar.Empresa,
-      tiempo: datoEnviar.Tiempo,
-      sede: datoEnviar.Sede,
-      dni: datoEnviar.Dni
-    };
-   /*  console.log(payload)
-    fetch("http://localhost:5000/api/send/certificadoAlumnoRegular", {
-    //fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoAlumnoRegular", {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: "POST",
-      body: JSON.stringify(payload)
-    })
-    .then(function (res) { return res.json(); })
-    .then(function (data) { alert(JSON.stringify(data)) }) */
-
     let pdf = new jsPDF();
     
     pdf.addImage(templateCertificado, 'JPG', 0, 0, 200, 280);
@@ -321,7 +298,9 @@ function handleCertificadoTrabajoCampo(event) {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Metodo de recepcion para los certificados para Constancia de Alumno Regular
+//Se Genera un PDF - PDFKit
+//Solicita Datos al Usuario
 function handleCertificadoAlumnoRegularEvent(event) {
   
   const parent = document.createElement('div');
@@ -354,33 +333,6 @@ function handleCertificadoAlumnoRegularEvent(event) {
     let d = date.getDate().toString().padStart(2, "0");
     let y = date.getFullYear();
 
-    let payload = {
-      name: datoEnviar.Nombre,
-      email: datoEnviar.Email,
-      subject: datoEnviar.Constancias,
-      message: datoEnviar.Constancias,
-      aula: datoEnviar.Aulas,
-      carreras: datoEnviar.Carreras, 
-      materias: datoEnviar.Materias,
-      constancia: datoEnviar.Constancias,
-      empresa: datoEnviar.Empresa,
-      tiempo: datoEnviar.Tiempo,
-      sede: datoEnviar.Sede,
-      dni: datoEnviar.Dni
-    };
-   /*  console.log(payload)
-    fetch("http://localhost:5000/api/send/certificadoAlumnoRegular", {
-    //fetch("https://alumnia-chatbot.herokuapp.com/api/send/certificadoAlumnoRegular", {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: "POST",
-      body: JSON.stringify(payload)
-    })
-    .then(function (res) { return res.json(); })
-    .then(function (data) { alert(JSON.stringify(data)) }) */
-
     let pdf = new jsPDF();
     
     pdf.addImage(templateCertificado, 'JPG', 0, 0, 200, 280);
@@ -409,10 +361,10 @@ function handleCertificadoAlumnoRegularEvent(event) {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Metodo de recepcion para los Planes de Estudio
+//Genera una card - bootstrap - con diferentes items Dinamicos que los devuelve el mismo Watson
 function handlePlanEstudioEvent(event) {
   const { message } = event.data;
-  console.log(message);
   switch (message.user_defined.context.carreras) {
     case 'Lic. En Gestion de la Informacion':
       var PDF = 'https://drive.google.com/file/d/1EQEQRTEBZizcy05jjyLWPzGZuT2jwoG2/view?usp=sharing';
@@ -455,6 +407,8 @@ function handlePlanEstudioEvent(event) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Metodo de recepcion para las Mesa de Examenes
+//Genera una card - bootstrap - los devuelve el mismo Watson
 
 function handleExamenesEvent(event) {
   const parent = document.createElement('div');
@@ -478,11 +432,12 @@ function handleExamenesEvent(event) {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Metodo de recepcion para las Distintas Sedes
+//Genera una card - bootstrap - con diferentes items Dinamicos que los devuelve el mismo Watson
+//Muestra un Map con las distintas Sedes
 
 function handleSedeEvent(event) {
   const parent = document.createElement('div');
-
-  //Don Bosco 3729, C1206ABG
 
   // Create a element with the 'ibm-web-chat-card' class we will add our content to.
   // This class makes the element look like one of the cards used in web chat.
@@ -516,6 +471,8 @@ function handleSedeEvent(event) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Metodo de recepcion para los Horarios
+//Genera una card - bootstrap - los devuelve el mismo Watson
 
 function handleHorariosEvent(event) {
   const parent = document.createElement('div');
@@ -538,7 +495,7 @@ function handleHorariosEvent(event) {
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Integracion del IBM Chat que se encuentra en la misma pagina de IBM
 window.watsonAssistantChatOptions = {
     integrationID: "9ea94948-b85a-424b-b665-29ee3a1d4469", // The ID of this integration.
     region: "us-south", // The region your integration is hosted in.
