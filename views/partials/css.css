@@ -20,7 +20,7 @@ button.chatLauncher {
     animation-duration: 0.5s;
     transition-duration: 0.5s;
     position: fixed;
-    bottom: 35px;
+    bottom: 50px;
     right: 35px;
     z-index: 9999;
     border: 2px solid #0864d4;
