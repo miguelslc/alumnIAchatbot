@@ -20,8 +20,8 @@ button.chatLauncher {
     animation-duration: 0.5s;
     transition-duration: 0.5s;
     position: fixed;
-    bottom: 40px;
-    right: 75px;
+    bottom: 35px;
+    right: 35px;
     z-index: 9999;
     border: 2px solid #0864d4;
     padding: 1em;
@@ -66,7 +66,7 @@ button.chatLauncher:focus {
 }
 
 .main-header {
-  padding: 100px;
+  padding: 10px;
 }
 
 .content-img h1 {
