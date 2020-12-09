@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
         { id: 2, name: "Matias",  lastName: "Bueno",      job:"Analista Funcional",     img:"https://fotos.subefotos.com/5ca8300094b7cf7fc7eb946c9448a113o.png"},
         { id: 3, name: "Lourdes", lastName: "Urban",      job:"Analista Funcional",     img:"https://fotos.subefotos.com/660caee4500153c8823af6dc20ed14f2o.png"},
         { id: 4, name: "Yamil" ,  lastName: "Arellano",   job:"Analista Tecnico",       img:"https://fotos.subefotos.com/60786c446db579e71f131d2dcc8cc471o.png"},
-        { id: 5, name: "Yanina" , lastName: "Fiordoliva", job:"Documentadora",          img:"https://fotos.subefotos.com/0ad92412b891585e39bd8a75ed1afcdao.png"},
+        { id: 5, name: "Yanina" , lastName: "Fiordoliva", job:"Técnica en RRHH",        img:"https://fotos.subefotos.com/0ad92412b891585e39bd8a75ed1afcdao.png"},
         { id: 6, name: "Gabriel", lastName: "Campos",     job:"Tester",                 img:"https://fotos.subefotos.com/5246b08c7db12e4d47c3605a36a77923o.png"},
         { id: 7, name: "Pedro",   lastName: "Bonanatta",  job:"Tester",                 img:"https://fotos.subefotos.com/95f57075d59be692c95b9d810092492bo.png"},
         { id: 8, name: "Miguel" , lastName: "Garcia",     job:"Desarrollador",          img:"https://fotos.subefotos.com/697d98123dc0d664dd75ec26aa630527o.png"},

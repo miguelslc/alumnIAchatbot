@@ -66,7 +66,7 @@ button.chatLauncher:focus {
 }
 
 .main-header {
-  padding: 100px;
+  padding: 10px;
 }
 
 .content-img h1 {
@@ -74,12 +74,14 @@ button.chatLauncher:focus {
   color: #ffffff;
   font-weight: 500;
   line-height: 1.5em;
+  color: #0c71b9;
 }
 
 .content-img h2 {
   font-size: 3em;
   color: #ffffff;
   font-weight: 700;
+
 }
 
 .content-img h3 {
